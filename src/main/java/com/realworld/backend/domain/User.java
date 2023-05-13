@@ -1,5 +1,6 @@
 package com.realworld.backend.domain;
 
+import com.realworld.backend.controller.dto.UserDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 
@@ -23,5 +24,10 @@ public class User {
         this.name = name;
         this.email = email;
         this.password = password;
+    }
+
+
+    public static User of(UserDto dto) {
+        return new User(dto.getUsername(), dto.getEmail(), dto.getPassword());
     }
 }
