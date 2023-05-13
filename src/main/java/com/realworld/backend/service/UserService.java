@@ -1,6 +1,8 @@
 package com.realworld.backend.service;
 
 import com.realworld.backend.domain.User;
+import com.realworld.backend.exception.RealWorldError;
+import com.realworld.backend.exception.RealWorldException;
 import com.realworld.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,7 +23,7 @@ public class UserService {
     private void validateDuplicated(User user) {
         userRepository.findByName(user.getName())
                 .ifPresent((u) -> {
-                    throw new IllegalStateException("user already exists");
+                    throw new RealWorldException(RealWorldError.DUPLICATE_USER);
                 });
     }
 }
