@@ -9,11 +9,14 @@ import lombok.Getter;
 @JsonTypeName("user")
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.WRAPPER_OBJECT)
 public class UserDto {
-    private final String username;
-    private final String email;
-    private final String password;
+    private String username;
+    private String email;
+    private String password;
 
+    protected UserDto() {
 
+    }
+    
     public UserDto(String username, String email, String password) {
         this.username = username;
         this.email = email;
