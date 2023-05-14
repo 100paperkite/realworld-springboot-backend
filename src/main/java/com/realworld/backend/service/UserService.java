@@ -21,7 +21,7 @@ public class UserService {
     }
 
     private void validateDuplicated(User user) {
-        userRepository.findByName(user.getName())
+        userRepository.findByEmail(user.getEmail())
                 .ifPresent((u) -> {
                     throw new RealWorldException(RealWorldError.DUPLICATE_USER);
                 });

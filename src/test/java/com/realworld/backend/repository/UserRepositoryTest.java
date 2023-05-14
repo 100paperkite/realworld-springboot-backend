@@ -19,14 +19,15 @@ class UserRepositoryTest {
     private UserRepository userRepository;
 
     @Test
-    @DisplayName("이름으로 찾을 수 있다")
+    @DisplayName("이메일로 찾을 수 있다")
     @Transactional
     void assertFindByName() {
-        User user = new User("test", "test@test.test", "testtesttest");
+        String email = "test@test.test";
+        User user = new User("test", email, "testtesttest");
         userRepository.save(user);
 
-        Optional<User> found = userRepository.findByName("test");
-        Optional<User> notFound = userRepository.findByName("notFound");
+        Optional<User> found = userRepository.findByEmail(email);
+        Optional<User> notFound = userRepository.findByEmail("invalid@invalid.invalid");
 
         assertThat(found).isPresent();
         assertThat(notFound).isNotPresent();
