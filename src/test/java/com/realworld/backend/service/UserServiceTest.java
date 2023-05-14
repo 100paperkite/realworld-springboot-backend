@@ -23,7 +23,7 @@ class UserServiceTest {
     @DisplayName("중복 유저라면 예외 발생")
     public void assertDuplicateRegistration() throws Exception {
         User user = new User("test", "test@test.test", "test");
-        given(userRepository.findByName("test")).willReturn(Optional.of(user));
+        given(userRepository.findByEmail("test@test.test")).willReturn(Optional.of(user));
 
         assertThatThrownBy(() -> userService.register(user))
                 .isInstanceOf(RealWorldException.class)
