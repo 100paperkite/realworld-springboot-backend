@@ -16,6 +16,7 @@ public class User {
     private Long id;
 
     private String name;
+    @Column(unique = true)
     private String email;
     private String password;
 
@@ -27,7 +28,7 @@ public class User {
         this.email = email;
         this.password = password;
     }
-    
+
     public static User of(UserDto dto) {
         return new User(dto.getUsername(), dto.getEmail(), dto.getPassword());
     }
@@ -37,11 +38,11 @@ public class User {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return Objects.equals(id, user.id);
+        return email.equals(user.email);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(email);
     }
 }
