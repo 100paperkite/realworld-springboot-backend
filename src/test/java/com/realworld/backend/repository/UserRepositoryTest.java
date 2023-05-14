@@ -1,6 +1,7 @@
 package com.realworld.backend.repository;
 
 import com.realworld.backend.domain.User;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -18,6 +19,7 @@ class UserRepositoryTest {
     private UserRepository userRepository;
 
     @Test
+    @DisplayName("이름으로 찾을 수 있다")
     @Transactional
     void assertFindByName() {
         User user = new User("test", "test@test.test", "testtesttest");
