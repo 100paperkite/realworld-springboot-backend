@@ -1,7 +1,5 @@
 package com.realworld.backend.security;
 
-import com.realworld.backend.exception.RealWorldException;
-import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
@@ -17,8 +15,6 @@ import org.springframework.stereotype.Component;
 import java.security.Key;
 import java.util.Date;
 import java.util.Optional;
-
-import static com.realworld.backend.exception.RealWorldError.INVALID_AUTH_TOKEN;
 
 @Component
 public class TokenProvider {
@@ -54,7 +50,7 @@ public class TokenProvider {
 
     }
 
-    public String getUsername(String token) {
+    private String getUsername(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(key)
                 .build()
@@ -63,26 +59,12 @@ public class TokenProvider {
                 .getSubject();
     }
 
-
-    public boolean validateToken(String token) {
-        try {
-            Jwts.parserBuilder()
-                    .setSigningKey(key)
-                    .build()
-                    .parseClaimsJws(token);
-            return true;
-
-        } catch (JwtException | IllegalArgumentException e) {
-            throw new RealWorldException(INVALID_AUTH_TOKEN);
-        }
-    }
-
     public Authentication getAuthentication(String token) {
         UserDetails userDetails = this.userDetails.loadUserByUsername(getUsername(token));
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
 
-    public Optional<String> resolveToken(String header) {
+    public Optional<String> resolveHeader(String header) {
         return Optional.ofNullable(header)
                 .filter(token -> token.startsWith(TOKEN_TYPE_NAME + " "))
                 .map(token -> token.substring(7));
