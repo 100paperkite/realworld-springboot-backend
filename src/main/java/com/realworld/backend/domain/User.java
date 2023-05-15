@@ -2,12 +2,16 @@ package com.realworld.backend.domain;
 
 import com.realworld.backend.controller.dto.UserDto;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.Objects;
 
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 @Getter
 @Table(name = "users")
@@ -22,6 +26,7 @@ public class User {
     private String password;
     private String bio;
     private String image;
+
 
     public static User from(UserDto dto) {
         return User.builder()
