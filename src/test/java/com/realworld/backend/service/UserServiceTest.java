@@ -1,5 +1,7 @@
 package com.realworld.backend.service;
 
+import com.realworld.backend.controller.dto.UserLogin;
+import com.realworld.backend.controller.dto.UserRegistration;
 import com.realworld.backend.domain.User;
 import com.realworld.backend.exception.RealWorldException;
 import com.realworld.backend.repository.UserRepository;
@@ -17,6 +19,12 @@ import static org.mockito.Mockito.mock;
 
 class UserServiceTest {
 
+    private static final User USER = User.builder()
+            .id(1L)
+            .name("test")
+            .email("test@test.test")
+            .password("testtesttest")
+            .build();
     private final UserRepository userRepository = mock(UserRepository.class);
     private final UserService userService = new UserService(userRepository);
 
@@ -25,28 +33,26 @@ class UserServiceTest {
     @DisplayName("로그인에 성공한다")
     public void assertLoginSucceed() throws Exception {
         //given
-        User user = new User("test", "test@test.test", "test");
+        given(userRepository.findByEmail(USER.getEmail())).willReturn(Optional.of(USER));
 
-        given(userRepository.findByEmail(user.getEmail()))
-                .willReturn(Optional.of(user));
+        UserLogin dto = new UserLogin(USER.getEmail(), USER.getPassword());
 
         //when
-        User expected = userService.login(user.getEmail(), user.getPassword());
+        User expected = userService.login(dto);
 
         //then
-        assertThat(expected).isEqualTo(user);
+        assertThat(expected).isEqualTo(USER);
     }
 
     @Test
     @DisplayName("로그인할 유저가 존재하지 않으면 예외가 난다")
     public void assertExceptionWhenLoginUserNotExist() throws Exception {
         //given
-        String email = "test@test.test";
-        given(userRepository.findByEmail(email))
-                .willReturn(Optional.empty());
+        given(userRepository.findByEmail(USER.getEmail())).willReturn(Optional.empty());
+        UserLogin dto = new UserLogin(USER.getEmail(), "invalid");
 
         //when, then
-        assertThatThrownBy(() -> userService.login(email, "invalid"))
+        assertThatThrownBy(() -> userService.login(dto))
                 .isInstanceOf(RealWorldException.class)
                 .hasMessage(AUTHENTICATION_FAILED.message());
     }
@@ -55,53 +61,40 @@ class UserServiceTest {
     @DisplayName("로그인 비밀번호가 맞지 않으면 예외가 난다")
     public void assertExceptionWhenLoginFailed() throws Exception {
         //given
-        User user = new User("test", "test@test.test", "test");
-        given(userRepository.findByEmail(user.getEmail()))
-                .willReturn(Optional.of(user));
+        given(userRepository.findByEmail(USER.getEmail())).willReturn(Optional.of(USER));
+        UserLogin dto = new UserLogin(USER.getEmail(), "invalid");
 
         //when, then
-        assertThatThrownBy(() -> userService.login(user.getEmail(), "invalid"))
+        assertThatThrownBy(() -> userService.login(dto))
                 .isInstanceOf(RealWorldException.class)
                 .hasMessage(AUTHENTICATION_FAILED.message());
     }
 
     @Test
-    @DisplayName("중복 유저라면 예외 발생")
+    @DisplayName("회원가입 시 중복 유저라면 예외 발생")
     public void assertDuplicateRegistration() throws Exception {
-        User user = new User("test", "test@test.test", "test");
-        given(userRepository.findByEmail("test@test.test")).willReturn(Optional.of(user));
+        given(userRepository.findByEmail("test@test.test")).willReturn(Optional.of(USER));
+        UserRegistration dto = new UserRegistration(USER.getEmail(), USER.getName(), USER.getPassword());
 
-        assertThatThrownBy(() -> userService.register(user))
+
+        assertThatThrownBy(() -> userService.register(dto))
                 .isInstanceOf(RealWorldException.class)
                 .hasMessage(DUPLICATE_USER.message());
     }
 
     @Test
-    @DisplayName("등록한 유저의 ID를 반환한다")
+    @DisplayName("회원가입 성공 시 등록한 유저를 반환한다")
     public void assertReturnsIdWhenRegister() throws Exception {
         //given
-        Long id = 1L;
-        User user = new MockUser(id, "test", "test@test.test", "test");
-        given(userRepository.save(user)).willReturn(user);
+        given(userRepository.save(USER)).willReturn(USER);
+        UserRegistration dto = new UserRegistration(USER.getEmail(), USER.getName(), USER.getPassword());
+
 
         //when
-        Long resultId = userService.register(user);
+        User user = userService.register(dto);
 
         //then
-        assertThat(resultId).isEqualTo(id);
-    }
-
-    private static class MockUser extends User {
-        private final Long id;
-
-        public MockUser(Long id, String name, String email, String password) {
-            super(name, email, password);
-            this.id = id;
-        }
-
-        @Override
-        public Long getId() {
-            return id;
-        }
+        assertThat(user.getId()).isEqualTo(USER.getId());
+        assertThat(user).isEqualTo(USER);
     }
 }

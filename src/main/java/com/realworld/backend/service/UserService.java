@@ -1,5 +1,7 @@
 package com.realworld.backend.service;
 
+import com.realworld.backend.controller.dto.UserLogin;
+import com.realworld.backend.controller.dto.UserRegistration;
 import com.realworld.backend.domain.User;
 import com.realworld.backend.exception.RealWorldException;
 import com.realworld.backend.repository.UserRepository;
@@ -16,25 +18,32 @@ public class UserService {
     private final UserRepository userRepository;
 
     @Transactional
-    public Long register(User user) {
-        validateDuplicated(user);
-        userRepository.save(user);
-        return user.getId();
+    public User register(UserRegistration registration) {
+
+        User user = User.builder()
+                .email(registration.getEmail())
+                .name(registration.getUsername())
+                .password(registration.getPassword())
+                .build();
+
+        validateDuplicated(user.getEmail());
+
+
+        return userRepository.save(user);
     }
 
-    private void validateDuplicated(User user) {
-        userRepository.findByEmail(user.getEmail())
-                .ifPresent((u) -> {
-                    throw new RealWorldException(DUPLICATE_USER);
-                });
+    private void validateDuplicated(String email) {
+        userRepository.findByEmail(email).ifPresent((u) -> {
+            throw new RealWorldException(DUPLICATE_USER);
+        });
     }
 
     @Transactional(readOnly = true)
-    public User login(String email, String password) {
-        User user = userRepository.findByEmail(email)
+    public User login(UserLogin login) {
+        User user = userRepository.findByEmail(login.getEmail())
                 .orElseThrow(() -> new RealWorldException(AUTHENTICATION_FAILED));
 
-        if (!user.getPassword().equals(password)) {
+        if (!user.getPassword().equals(login.getPassword())) {
             throw new RealWorldException(AUTHENTICATION_FAILED);
         }
         return user;
