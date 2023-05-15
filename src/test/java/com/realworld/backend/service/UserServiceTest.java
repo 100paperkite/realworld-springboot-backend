@@ -12,6 +12,7 @@ import java.util.Optional;
 
 import static com.realworld.backend.exception.RealWorldError.AUTHENTICATION_FAILED;
 import static com.realworld.backend.exception.RealWorldError.DUPLICATE_USER;
+import static com.realworld.backend.fixture.UserFixture.USER;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.BDDMockito.given;
@@ -19,12 +20,6 @@ import static org.mockito.Mockito.mock;
 
 class UserServiceTest {
 
-    private static final User USER = User.builder()
-            .id(1L)
-            .name("test")
-            .email("test@test.test")
-            .password("testtesttest")
-            .build();
     private final UserRepository userRepository = mock(UserRepository.class);
     private final UserService userService = new UserService(userRepository);
 
