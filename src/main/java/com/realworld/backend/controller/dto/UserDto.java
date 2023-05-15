@@ -1,30 +1,28 @@
 package com.realworld.backend.controller.dto;
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.realworld.backend.domain.User;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
-@JsonTypeName("user")
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.WRAPPER_OBJECT)
-public class UserDto {
-    private String username;
+@NoArgsConstructor
+public class UserDto implements UserRequestResponse {
     private String email;
-    private String password;
+    private String token;
+    private String username;
+    private String bio;
+    private String image;
 
-    protected UserDto() {
+    public static UserDto valueOf(User user, String token) {
+        UserDto response = new UserDto();
 
-    }
-    
-    public UserDto(String username, String email, String password) {
-        this.username = username;
-        this.email = email;
-        this.password = password;
-    }
+        response.email = user.getEmail();
+        response.username = user.getName();
+        response.bio = user.getBio();
+        response.image = user.getImage();
 
+        response.token = token;
 
-    public static UserDto of(User user) {
-        return new UserDto(user.getName(), user.getEmail(), user.getPassword());
+        return response;
     }
 }
