@@ -2,11 +2,13 @@ package com.realworld.backend.domain;
 
 import com.realworld.backend.controller.dto.UserDto;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 
 import java.util.Objects;
 
 @Entity
+@Builder
 @Getter
 @Table(name = "users")
 public class User {
@@ -14,23 +16,20 @@ public class User {
     @GeneratedValue
     @Column(name = "user_id")
     private Long id;
-
     private String name;
     @Column(unique = true)
     private String email;
     private String password;
+    private String bio;
+    private String image;
 
-    protected User() {
-    }
-
-    public User(String name, String email, String password) {
-        this.name = name;
-        this.email = email;
-        this.password = password;
-    }
-
-    public static User of(UserDto dto) {
-        return new User(dto.getUsername(), dto.getEmail(), dto.getPassword());
+    public static User from(UserDto dto) {
+        return User.builder()
+                .name(dto.getUsername())
+                .email(dto.getEmail())
+                .bio(dto.getBio())
+                .image(dto.getImage())
+                .build();
     }
 
     @Override
