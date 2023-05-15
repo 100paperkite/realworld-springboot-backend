@@ -1,7 +1,7 @@
 package com.realworld.backend.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.realworld.backend.controller.dto.UserDto;
+import com.realworld.backend.controller.dto.UserRegistration;
 import com.realworld.backend.domain.User;
 import com.realworld.backend.exception.RealWorldException;
 import com.realworld.backend.service.UserService;
@@ -19,6 +19,7 @@ import java.nio.charset.StandardCharsets;
 
 import static com.realworld.backend.exception.RealWorldError.DUPLICATE_USER;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doThrow;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -35,8 +36,8 @@ class UserControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    private MockHttpServletRequestBuilder registerRequest(UserDto dto) throws Exception {
-        return post("/api/users/register")
+    private MockHttpServletRequestBuilder registerRequest(UserRegistration dto) throws Exception {
+        return post("/api/users")
                 .contentType(MediaType.APPLICATION_JSON)
                 .characterEncoding(StandardCharsets.UTF_8)
                 .content(objectMapper.writeValueAsString(dto));
@@ -46,35 +47,36 @@ class UserControllerTest {
     @DisplayName("회원가입에 성공하면 200과 User 반환")
     public void assertUserRegistration() throws Exception {
         //given
-        String name = "jane";
-        String email = "jane@jane.jane";
-        String password = "janejanejane";
+        var dto = new UserRegistration("jane", "jane@jane.jane", "janejanejane");
+        var user = User.builder()
+                .name(dto.getUsername())
+                .email(dto.getEmail())
+                .password(dto.getPassword())
+                .build();
 
-        UserDto dto = new UserDto(name, email, password);
+        given(userService.register(any(UserRegistration.class))).willReturn(user);
 
         //when
         ResultActions result = mockMvc.perform(registerRequest(dto));
 
         //then
         result.andExpect(status().isOk())
-                .andExpect(jsonPath("user.username").value(name))
-                .andExpect(jsonPath("user.email").value(email))
-                .andExpect(jsonPath("user.password").value(password));
+                .andExpect(jsonPath("user.username").value(user.getName()))
+                .andExpect(jsonPath("user.email").value(user.getEmail()))
+                .andExpect(jsonPath("user.token").hasJsonPath())
+                .andExpect(jsonPath("user.bio").hasJsonPath())
+                .andExpect(jsonPath("user.image").hasJsonPath());
     }
 
     @Test
     @DisplayName("회원가입 시 중복 유저라면 409 에러와 적절한 에러메시지를 반환")
     public void assertDuplicatedUserRegistration() throws Exception {
         //given
-        String name = "jane";
-        String email = "jane@jane.jane";
-        String password = "janejanejane";
-
-        UserDto dto = new UserDto(name, email, password);
+        var dto = new UserRegistration("jane", "jane@jane.jane", "janejanejane");
 
         // when
         doThrow(new RealWorldException(DUPLICATE_USER))
-                .when(userService).register(any(User.class));
+                .when(userService).register(any(UserRegistration.class));
 
 
         //then
