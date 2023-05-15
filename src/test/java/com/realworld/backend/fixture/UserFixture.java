@@ -14,6 +14,8 @@ public final class UserFixture {
     public static UserRegistration REGISTER = new UserRegistration(USER.getEmail(), USER.getName(), USER.getPassword());
     public static UserLogin LOGIN = new UserLogin(USER.getEmail(), USER.getPassword());
 
+    public static String JWT = "jwt.jwt.jwt";
+
     private UserFixture() {
     }
 }
