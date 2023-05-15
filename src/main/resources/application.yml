@@ -7,3 +7,10 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create
+
+
+security:
+  jwt:
+    secret: ${JWT_SECRET}
+    token:
+      expiration: 86400
