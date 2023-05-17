@@ -1,12 +1,12 @@
-package com.realworld.backend.controller;
+package com.realworld.backend.users.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.realworld.backend.controller.dto.UserLogin;
-import com.realworld.backend.controller.dto.UserRegistration;
 import com.realworld.backend.exception.RealWorldException;
-import com.realworld.backend.fixture.UserFixture;
 import com.realworld.backend.security.TokenProvider;
-import com.realworld.backend.service.UserService;
+import com.realworld.backend.users.dto.UserLogin;
+import com.realworld.backend.users.dto.UserRegistration;
+import com.realworld.backend.users.fixture.UserFixture;
+import com.realworld.backend.users.service.UserService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

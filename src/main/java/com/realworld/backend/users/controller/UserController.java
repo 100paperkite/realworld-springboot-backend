@@ -1,11 +1,10 @@
-package com.realworld.backend.controller;
+package com.realworld.backend.users.controller;
 
-import com.realworld.backend.controller.dto.UserDto;
-import com.realworld.backend.controller.dto.UserLogin;
-import com.realworld.backend.controller.dto.UserRegistration;
-import com.realworld.backend.domain.User;
 import com.realworld.backend.security.TokenProvider;
-import com.realworld.backend.service.UserService;
+import com.realworld.backend.users.dto.UserInfo;
+import com.realworld.backend.users.dto.UserLogin;
+import com.realworld.backend.users.dto.UserRegistration;
+import com.realworld.backend.users.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,16 +20,16 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping
-    public ResponseEntity<UserDto> register(@RequestBody UserRegistration registration) {
-        User user = userService.register(registration);
+    public ResponseEntity<UserInfo> register(@RequestBody UserRegistration registration) {
+        com.realworld.backend.users.entity.User user = userService.register(registration);
         String accessToken = tokenProvider.createToken(user.getEmail());
-        return ResponseEntity.ok(UserDto.valueOf(user, accessToken));
+        return ResponseEntity.ok(UserInfo.valueOf(user, accessToken));
     }
 
     @PostMapping("/login")
-    public ResponseEntity<UserDto> login(@RequestBody UserLogin login) {
-        User user = userService.login(login);
+    public ResponseEntity<UserInfo> login(@RequestBody UserLogin login) {
+        com.realworld.backend.users.entity.User user = userService.login(login);
         String accessToken = tokenProvider.createToken(user.getEmail());
-        return ResponseEntity.ok(UserDto.valueOf(user, accessToken));
+        return ResponseEntity.ok(UserInfo.valueOf(user, accessToken));
     }
 }

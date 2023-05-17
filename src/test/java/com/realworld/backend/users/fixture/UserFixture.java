@@ -1,8 +1,8 @@
-package com.realworld.backend.fixture;
+package com.realworld.backend.users.fixture;
 
-import com.realworld.backend.controller.dto.UserLogin;
-import com.realworld.backend.controller.dto.UserRegistration;
-import com.realworld.backend.domain.User;
+import com.realworld.backend.users.dto.UserLogin;
+import com.realworld.backend.users.dto.UserRegistration;
+import com.realworld.backend.users.entity.User;
 
 public final class UserFixture {
     public static User USER = User.builder()

@@ -1,6 +1,6 @@
-package com.realworld.backend.domain;
+package com.realworld.backend.users.entity;
 
-import com.realworld.backend.controller.dto.UserDto;
+import com.realworld.backend.users.dto.UserInfo;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -28,8 +28,8 @@ public class User {
     private String image;
 
 
-    public static User from(UserDto dto) {
-        return User.builder()
+    public static User from(UserInfo dto) {
+        return com.realworld.backend.users.entity.User.builder()
                 .name(dto.getUsername())
                 .email(dto.getEmail())
                 .bio(dto.getBio())

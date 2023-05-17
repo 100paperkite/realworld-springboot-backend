@@ -1,6 +1,6 @@
-package com.realworld.backend.repository;
+package com.realworld.backend.users.repository;
 
-import com.realworld.backend.domain.User;
+import com.realworld.backend.users.entity.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
