@@ -1,7 +1,7 @@
 package com.realworld.backend.security;
 
-import com.realworld.backend.domain.User;
-import com.realworld.backend.repository.UserRepository;
+import com.realworld.backend.users.entity.User;
+import com.realworld.backend.users.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

@@ -1,10 +1,10 @@
-package com.realworld.backend.service;
+package com.realworld.backend.users.service;
 
-import com.realworld.backend.controller.dto.UserLogin;
-import com.realworld.backend.controller.dto.UserRegistration;
-import com.realworld.backend.domain.User;
 import com.realworld.backend.exception.RealWorldException;
-import com.realworld.backend.repository.UserRepository;
+import com.realworld.backend.users.dto.UserLogin;
+import com.realworld.backend.users.dto.UserRegistration;
+import com.realworld.backend.users.entity.User;
+import com.realworld.backend.users.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

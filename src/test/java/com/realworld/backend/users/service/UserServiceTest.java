@@ -1,10 +1,10 @@
-package com.realworld.backend.service;
+package com.realworld.backend.users.service;
 
-import com.realworld.backend.controller.dto.UserLogin;
-import com.realworld.backend.controller.dto.UserRegistration;
-import com.realworld.backend.domain.User;
 import com.realworld.backend.exception.RealWorldException;
-import com.realworld.backend.repository.UserRepository;
+import com.realworld.backend.users.dto.UserLogin;
+import com.realworld.backend.users.dto.UserRegistration;
+import com.realworld.backend.users.entity.User;
+import com.realworld.backend.users.repository.UserRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -12,7 +12,7 @@ import java.util.Optional;
 
 import static com.realworld.backend.exception.RealWorldError.AUTHENTICATION_FAILED;
 import static com.realworld.backend.exception.RealWorldError.DUPLICATE_USER;
-import static com.realworld.backend.fixture.UserFixture.USER;
+import static com.realworld.backend.users.fixture.UserFixture.USER;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.BDDMockito.given;

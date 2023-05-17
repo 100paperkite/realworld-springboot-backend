@@ -1,20 +1,20 @@
-package com.realworld.backend.controller.dto;
+package com.realworld.backend.users.dto;
 
-import com.realworld.backend.domain.User;
+import com.realworld.backend.users.entity.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class UserDto implements UserRequestResponse {
+public class UserInfo implements UserDto {
     private String email;
     private String token;
     private String username;
     private String bio;
     private String image;
 
-    public static UserDto valueOf(User user, String token) {
-        UserDto response = new UserDto();
+    public static UserInfo valueOf(User user, String token) {
+        UserInfo response = new UserInfo();
 
         response.email = user.getEmail();
         response.username = user.getName();
